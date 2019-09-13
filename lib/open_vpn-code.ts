@@ -66,13 +66,17 @@ export class OpenVpnCode extends cdk.Stack {
 
     const serverStack = new OpenVpnStack(scope, 'OpenVPNStack');
 
-    const deployPolicyPrincipal = new iam.ServicePrincipal('cloudformation.amazonaws.com');
+    const deployPolicyPrincipal = new iam.AccountRootPrincipal();
     const deployPolicyStatement = new iam.PolicyStatement({
       effect: iam.Effect.ALLOW,
-      actions: ['cloudformation:*'],
+      actions: [
+        'cloudformation:CreateChangeSet',
+        'cloudformation:ExecuteChangeSet',
+        'ssm:GetParameters'
+      ],
       resources: [serverStack.stackId],
     });
-    const deployRole = new iam.Role(this, 'MinecraftDeploymentRole', {
+    const deployRole = new iam.Role(this, 'OpenVPNDeploymentRole', {
       assumedBy: deployPolicyPrincipal,
     });
     deployRole.addToPolicy(deployPolicyStatement);
