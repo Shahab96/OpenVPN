@@ -1,0 +1,3 @@
+{
+  "app": "npx ts-node bin/open_vpn.ts"
+}
