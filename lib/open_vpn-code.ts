@@ -66,7 +66,7 @@ export class OpenVpnCode extends cdk.Stack {
 
     const serverStack = new OpenVpnStack(scope, 'OpenVPNStack');
 
-    const deployPolicyPrincipal = new iam.AccountRootPrincipal();
+    const deployPolicyPrincipal = new iam.ServicePrincipal('cloudformation.amazonaws.com');
     const deployPolicyStatement = new iam.PolicyStatement({
       effect: iam.Effect.ALLOW,
       actions: [
