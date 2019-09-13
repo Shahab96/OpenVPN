@@ -66,26 +66,10 @@ export class OpenVpnCode extends cdk.Stack {
 
     const serverStack = new OpenVpnStack(scope, 'OpenVPNStack');
 
-    const deployPolicyPrincipal = new iam.ServicePrincipal('cloudformation.amazonaws.com');
-    const deployPolicyStatement = new iam.PolicyStatement({
-      effect: iam.Effect.ALLOW,
-      actions: [
-        'cloudformation:CreateChangeSet',
-        'cloudformation:ExecuteChangeSet',
-        'ssm:GetParameters'
-      ],
-      resources: [serverStack.stackId],
-    });
-    const deployRole = new iam.Role(this, 'OpenVPNDeploymentRole', {
-      assumedBy: deployPolicyPrincipal,
-    });
-    deployRole.addToPolicy(deployPolicyStatement);
-
     const deploy = new cicd.PipelineDeployStackAction({
       stack: serverStack,
       input: buildArtifact,
-      adminPermissions: false,
-      role: deployRole,
+      adminPermissions: true,
     });
 
     new codepipeline.Pipeline(this, 'OpenVPNPipeline', {
