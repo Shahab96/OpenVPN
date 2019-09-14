@@ -7,14 +7,7 @@ export class OpenVpnStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    const vpc = new ec2.Vpc(this, 'OpenVPNVpc', {
-      maxAzs: 2,
-      natGateways: 1,
-      subnetConfiguration: [{
-        name: 'Public Subnet',
-        subnetType: ec2.SubnetType.PUBLIC,
-      }],
-    });
+    const vpc = new ec2.Vpc(this, 'OpenVPNVpc');
 
     const machineImage = new ec2.AmazonLinuxImage();
     const instanceType = ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE3_AMD, ec2.InstanceSize.NANO);
@@ -32,6 +25,9 @@ export class OpenVpnStack extends cdk.Stack {
       instanceType,
       keyName,
       securityGroup,
+      vpcSubnets: {
+        subnetType: ec2.SubnetType.PUBLIC,
+      },
     });
   }
 }
