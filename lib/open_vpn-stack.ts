@@ -9,7 +9,9 @@ export class OpenVpnStack extends cdk.Stack {
 
     const vpc = new ec2.Vpc(this, 'OpenVPNVpc');
 
-    const machineImage = new ec2.AmazonLinuxImage();
+    const machineImage = new ec2.GenericLinuxImage({
+      'us-east-1': 'ami-00a56d4e2bda9d721',
+    });
     const instanceType = ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE3_AMD, ec2.InstanceSize.NANO);
     const keyName = 'OpenVPNKeyPair';
     const securityGroup = new ec2.SecurityGroup(this, 'OpenVPNSecurityGroup', {
