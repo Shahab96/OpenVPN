@@ -12,12 +12,12 @@ export class OpenVpnDNS extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props: DNSProps) {
     super(scope, id, props);
 
-    const zone = route53.HostedZone.fromLookup(this, 'OpenVPNDNSHostedZone', {
-        domainName: 'shahab96.com',
-        privateZone: false,
+    const zone = route53.HostedZone.fromHostedZoneAttributes(this, 'OpenVPNDNSHostedZone', {
+      zoneName: 'shahab96.com',
+      hostedZoneId: 'Z2GCKEQH874TQR',
     });
 
-    const recordName = 'vpn.shahab96.com';
+    const recordName = 'vpn';
     const target = route53.RecordTarget.fromIpAddresses(props.instance.instancePublicIp);
 
     this.dnsRecord = new route53.ARecord(this, 'OpenVPNDNSARecord', {

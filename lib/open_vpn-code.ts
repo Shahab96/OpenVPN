@@ -31,7 +31,7 @@ export class OpenVpnCode extends cdk.Stack {
           commands: 'npm ci',
         },
         build: {
-          commands: [
+          commands: [,
             'npm run build',
             'npm run cdk synth -- -o dist',
           ],
@@ -74,10 +74,6 @@ export class OpenVpnCode extends cdk.Stack {
 
     const dnsStack = new OpenVpnDNS(this, 'OpenVPNDNSStack', {
       instance: serverStack.instance,
-      env: {
-        account: cdk.Aws.ACCOUNT_ID,
-        region: cdk.Aws.REGION,
-      },
     });
 
     const deployDNSUpdate = new cicd.PipelineDeployStackAction({
@@ -95,13 +91,13 @@ export class OpenVpnCode extends cdk.Stack {
         stageName: 'Build',
         actions: [build],
       }, {
-        stageName: 'Self Update',
+        stageName: 'SelfUpdate',
         actions: [selfUpdate],
       }, {
-        stageName: 'Instance Update',
+        stageName: 'InstanceDeploy',
         actions: [deployInstance],
       }, {
-        stageName: 'DNS Update',
+        stageName: 'DNSDeploy',
         actions: [deployDNSUpdate],
       }],
     });
