@@ -64,7 +64,12 @@ export class OpenVpnCode extends cdk.Stack {
       adminPermissions: true,
     });
 
-    const serverStack = new OpenVpnStack(scope, 'OpenVPNStack');
+    const serverStack = new OpenVpnStack(scope, 'OpenVPNStack', {
+      env: {
+        account: process.env.CDK_DEFAULT_ACCOUNT,
+        region: process.env.CDK_DEFAULT_REGION,
+      },
+    });
 
     const deployInstance = new cicd.PipelineDeployStackAction({
       stack: serverStack,
@@ -74,6 +79,10 @@ export class OpenVpnCode extends cdk.Stack {
 
     const dnsStack = new OpenVpnDNS(this, 'OpenVPNDNSStack', {
       instance: serverStack.instance,
+      env: {
+        account: process.env.CDK_DEFAULT_ACCOUNT,
+        region: process.env.CDK_DEFAULT_REGION,
+      },
     });
 
     const deployDNSUpdate = new cicd.PipelineDeployStackAction({

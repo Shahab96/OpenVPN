@@ -4,4 +4,9 @@ import cdk = require('@aws-cdk/core');
 import { OpenVpnCode } from '../lib/open_vpn-code';
 
 const app = new cdk.App();
-new OpenVpnCode(app, 'OpenVPNCodeStack');
+new OpenVpnCode(app, 'OpenVPNCodeStack', {
+  env: {
+    account: process.env.CDK_DEFAULT_ACCOUNT,
+    region: process.env.CDK_DEFAULT_REGION,
+  },
+});
