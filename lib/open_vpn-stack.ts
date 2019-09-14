@@ -10,6 +10,10 @@ export class OpenVpnStack extends cdk.Stack {
     const vpc = new ec2.Vpc(this, 'OpenVPNVpc', {
       maxAzs: 2,
       natGateways: 1,
+      subnetConfiguration: [{
+        name: 'Public Subnet',
+        subnetType: ec2.SubnetType.PUBLIC,
+      }],
     });
 
     const machineImage = new ec2.AmazonLinuxImage();
