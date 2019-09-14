@@ -26,6 +26,12 @@ export class OpenVpnCode extends cdk.Stack {
 
     const buildSpec = codebuild.BuildSpec.fromObject({
       version: '0.2',
+      env: {
+        variables: {
+          CDK_DEFAULT_ACCOUNT: process.env.CDK_DEFAULT_ACCOUNT,
+          CDK_DEFAULT_REGION: process.env.CDK_DEFAULT_REGION,
+        },
+      },
       phases: {
         install: {
           commands: 'npm ci',
