@@ -3,7 +3,6 @@ import * as codebuild from '@aws-cdk/aws-codebuild';
 import * as codepipeline from '@aws-cdk/aws-codepipeline';
 import * as codepipelineActions from '@aws-cdk/aws-codepipeline-actions';
 import * as cicd from '@aws-cdk/app-delivery';
-import * as iam from '@aws-cdk/aws-iam';
 import { OpenVpnStack } from './open_vpn-stack';
 import { OpenVpnDNS } from './open_vpn-dns';
 
@@ -75,6 +74,10 @@ export class OpenVpnCode extends cdk.Stack {
 
     const dnsStack = new OpenVpnDNS(this, 'OpenVPNDNSStack', {
       instance: serverStack.instance,
+      env: {
+        account: cdk.Aws.ACCOUNT_ID,
+        region: cdk.Aws.REGION,
+      },
     });
 
     const deployDNSUpdate = new cicd.PipelineDeployStackAction({
