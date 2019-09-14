@@ -5,6 +5,7 @@ import * as codepipelineActions from '@aws-cdk/aws-codepipeline-actions';
 import * as cicd from '@aws-cdk/app-delivery';
 import * as iam from '@aws-cdk/aws-iam';
 import { OpenVpnStack } from './open_vpn-stack';
+import { OpenVpnDNS } from './open_vpn-dns';
 
 export class OpenVpnCode extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
@@ -66,8 +67,18 @@ export class OpenVpnCode extends cdk.Stack {
 
     const serverStack = new OpenVpnStack(scope, 'OpenVPNStack');
 
-    const deploy = new cicd.PipelineDeployStackAction({
+    const deployInstance = new cicd.PipelineDeployStackAction({
       stack: serverStack,
+      input: buildArtifact,
+      adminPermissions: true,
+    });
+
+    const dnsStack = new OpenVpnDNS(this, 'OpenVPNDNSStack', {
+      instance: serverStack.instance,
+    });
+
+    const deployDNSUpdate = new cicd.PipelineDeployStackAction({
+      stack: dnsStack,
       input: buildArtifact,
       adminPermissions: true,
     });
@@ -81,11 +92,14 @@ export class OpenVpnCode extends cdk.Stack {
         stageName: 'Build',
         actions: [build],
       }, {
-        stageName: 'SelfUpdate',
+        stageName: 'Self Update',
         actions: [selfUpdate],
       }, {
-        stageName: 'Deploy',
-        actions: [deploy],
+        stageName: 'Instance Update',
+        actions: [deployInstance],
+      }, {
+        stageName: 'DNS Update',
+        actions: [deployDNSUpdate],
       }],
     });
   }
