@@ -16,12 +16,7 @@
     "aws-cdk": "^1.8.0"
   },
   "dependencies": {
-    "@aws-cdk/app-delivery": "^1.8.0",
-    "@aws-cdk/aws-codebuild": "^1.8.0",
-    "@aws-cdk/aws-codepipeline": "^1.8.0",
-    "@aws-cdk/aws-codepipeline-actions": "^1.8.0",
     "@aws-cdk/aws-ec2": "^1.8.0",
-    "@aws-cdk/aws-iam": "^1.8.0",
     "@aws-cdk/aws-route53": "^1.8.0",
     "@aws-cdk/core": "^1.8.0",
     "source-map-support": "^0.5.9"

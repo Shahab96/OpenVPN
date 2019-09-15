@@ -1,12 +1,17 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 import cdk = require('@aws-cdk/core');
-import { OpenVpnCode } from '../lib/open_vpn-code';
+import { OpenVpnStack } from '../lib/open_vpn-stack';
+import { OpenVpnDNS } from '../lib/open_vpn-dns';
 
 const app = new cdk.App();
-new OpenVpnCode(app, 'OpenVPNCodeStack', {
-  env: {
-    account: process.env.CDK_DEFAULT_ACCOUNT,
-    region: process.env.CDK_DEFAULT_REGION,
-  },
+const env = {
+  region: 'us-east-1',
+};
+const { instance } = new OpenVpnStack(app, 'OpenVPN', {
+  env,
+});
+new OpenVpnDNS(app, 'OpenVPNDNS', {
+  instance,
+  env,
 });
