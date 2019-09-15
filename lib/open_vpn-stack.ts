@@ -18,7 +18,7 @@ export class OpenVpnStack extends cdk.Stack {
       vpc,
     });
 
-    securityGroup.addIngressRule(ec2.Peer.anyIpv4(), ec2.Port.udp(1189));
+    securityGroup.addIngressRule(ec2.Peer.anyIpv4(), ec2.Port.udp(1194));
     securityGroup.addIngressRule(ec2.Peer.anyIpv4(), ec2.Port.tcp(22));
 
     this.instance = new ec2.Instance(this, 'OpenVPNInstance', {
