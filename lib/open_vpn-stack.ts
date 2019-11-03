@@ -7,7 +7,9 @@ export class OpenVpnStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    const vpc = new ec2.Vpc(this, 'OpenVPNVpc');
+    const vpc = new ec2.Vpc(this, 'OpenVPNVpc', {
+      maxAzs: 1,
+    });
 
     const machineImage = new ec2.GenericLinuxImage({
       'us-east-1': 'ami-00a56d4e2bda9d721',
